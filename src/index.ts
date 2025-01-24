@@ -1,7 +1,7 @@
 import {
     S3Client, ListObjectsV2Command
 } from '@aws-sdk/client-s3';
-import { Context } from 'aws-lambda';
+import { Context, S3Handler } from 'aws-lambda';
 
 const fakeContext: Context = {
     awsRequestId: 'fake-request-id',
@@ -20,6 +20,10 @@ const fakeContext: Context = {
 
 console.log('start');
 
+const testHandler: S3Handler = async (event: any, context: Context) => {
+    console.log('testHandler', event, context);
+}
+
 export const startPolling = async ({
     bucketName = 'my-first-bucket',
     interval = 5000,
@@ -30,7 +34,8 @@ export const startPolling = async ({
     credentials = {
         accessKeyId: 'fake-access-key-id',
         secretAccessKey: 'fake-secret-access-key'
-    }
+    },
+    handler = testHandler
 } = {
 }) => {
     const client = new S3Client({ 
@@ -58,8 +63,18 @@ export const startPolling = async ({
         }
 
         try {
-            console.log('Processing object', object.Key);
-            // await processObject(object);
+            console.log('New File:', object.Key);
+
+            const s3Event = {
+                Records: [
+                    {
+                        bucket: { name: bucketName },
+                        object: { key: object.Key }
+                    }
+                ]
+            }
+            
+            await handler(s3Event as any, fakeContext, () => {});
         } catch (error) {   
             console.error('Error processing object', object.Key, error);
         }
