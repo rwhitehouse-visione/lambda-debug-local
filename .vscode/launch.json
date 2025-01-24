@@ -4,12 +4,13 @@
     "configurations": [
         {
             "type": "node",
+            "runtimeExecutable": "npm",
+            "runtimeArgs": ["run", "dev"],
             "request": "launch",
             "name": "Launch Program",
             "skipFiles": ["<node_internals>/**"],
             "program": "${workspaceFolder}/src/index.ts",
             "outFiles": ["${workspaceFolder}/dist/**/*.js"],
-            "preLaunchTask": "tsc: build - tsconfig.json",
             "sourceMaps": true
         }
     ]

@@ -1,0 +1,15 @@
+name: lambda-runner
+services:
+  localstack:
+    image: localstack/localstack
+    ports:
+      - "4566-4599:4566-4599"
+    environment:
+      - SERVICES=s3,lambda
+      - DEBUG=1
+      - AWS_DEFAULT_REGION=us-central-1
+      - DISABLE_CORS_CHECKS=true
+      - EDGE_PORT=4566
+    volumes:
+      - "${LOCALSTACK_VOLUME_DIR:-./localstack}:/tmp/localstack"
+      - "/var/run/docker.sock:/var/run/docker.sock"
