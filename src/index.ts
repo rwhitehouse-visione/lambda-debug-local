@@ -18,6 +18,8 @@ const fakeContext: Context = {
     succeed: () => {}
 };
 
+console.log('start');
+
 export const startPolling = async () => {
     const client = new S3Client({ 
         region: 'eu-central-1', 
