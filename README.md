@@ -20,7 +20,7 @@ Required tools:
 - Docker
 - Node.js
 - npm
-- Localstack
+- Localstack (brew install localstack/tap/localstack-cli)
 - Make
 
 npm install
