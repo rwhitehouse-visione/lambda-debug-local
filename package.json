@@ -1,5 +1,6 @@
 {
   "name": "lambda-runner",
+  "version": "0.0.1",
   "scripts": {
     "dev": "tsx src/debug.ts",
     "start": "tsc && node dist/index.js",
