@@ -1,9 +1,9 @@
-import { startPolling } from './lambda-debug-local';
+import { startPollingS3 } from './lambda-debug-local';
 import { handler } from './example-lambda';
 
 console.log('Debugging example-lambda.ts');
 
-startPolling({
+startPollingS3({
     handler,
     bucketName: 'my-first-bucket',
     interval: 5000,

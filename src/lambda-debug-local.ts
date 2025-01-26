@@ -93,6 +93,6 @@ export const checkForMessage = async ({
     }));
 }
 
-export const startPolling = (config: CheckForMessageParams) => {
+export const startPollingS3 = (config: CheckForMessageParams) => {
     setInterval(async () => await checkForMessage(config), config.interval || 5000);
 }

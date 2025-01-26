@@ -1,20 +1,21 @@
 # Lambda Debugging Wrapper
-A wrapper around lambda to facilitate a better development experience
+A wrapper around lambda to facilitate a better development experience.  
+
+Using this library, you are able to run your lambda function code locally but still trigger it with real evente, ie. when a file is uploaded to an S3 bucket.  This avoids the need to build, package and deploy your lambda function every time you want to test it.
 
 Currently supported triggers:
-
-S3NewFileTrigger
+- S3NewFileTrigger
 
 ## Usage
 Full example:
 
 ```javascript
-import { startPolling } from './lambda-debug-local';
+import { startPollingS3 } from './lambda-debug-local';
 import { handler } from './example-lambda';
 
 console.log('Debugging example-lambda.ts');
 
-startPolling({
+startPollingS3({
     handler,
     bucketName: 'my-first-bucket',
     interval: 5000,
@@ -34,15 +35,15 @@ Install using npm:
 npm install -s lambda-debug-local
 ```
 
-Import the startPolling method 
+Import the startPollingS3 method 
 ```javascript
-import { startPolling } from './lambda-debug-local';
+import { startPollingS3 } from './lambda-debug-local';
 ```
 
-Call the startPolling method with the following parameters:
+Call the startPollingS3 method with the following parameters:
 ```javascript
 
-startPolling({
+startPollingS3({
     handler,
     bucketName: 'my-first-bucket',
     interval: 5000,
