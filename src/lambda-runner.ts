@@ -18,8 +18,6 @@ const fakeContext: Context = {
     succeed: () => {}
 };
 
-console.log('start');
-
 const testHandler: S3Handler = async (event: any, context: Context) => {
     console.log('testHandler', event, context);
 }
@@ -80,7 +78,3 @@ export const startPolling = async ({
         }
     }));
 }
-
-startPolling().then(() => {
-    console.log('done');
-});
