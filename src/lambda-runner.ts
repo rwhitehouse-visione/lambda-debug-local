@@ -22,7 +22,21 @@ const testHandler: S3Handler = async (event: any, context: Context) => {
     console.log('testHandler', event, context);
 }
 
-export const startPolling = async ({
+type CheckForMessageParams = {
+    bucketName?: string;
+    interval?: number;
+    region?: string;
+    endpoint?: string;
+    forcePathStyle?: boolean;
+    maxAge?: number;
+    credentials?: {
+        accessKeyId: string;
+        secretAccessKey: string;
+    };
+    handler?: S3Handler;
+};
+
+export const checkForMessage = async ({
     bucketName = 'my-first-bucket',
     interval = 5000,
     region = 'eu-central-1',
@@ -34,8 +48,8 @@ export const startPolling = async ({
         secretAccessKey: 'fake-secret-access-key'
     },
     handler = testHandler
-} = {
-}) => {
+}: CheckForMessageParams = {}) => {
+    console.log('Checking for new messages');
     const client = new S3Client({ 
         region, 
         endpoint,
@@ -77,4 +91,8 @@ export const startPolling = async ({
             console.error('Error processing object', object.Key, error);
         }
     }));
+}
+
+export const startPolling = (config: CheckForMessageParams) => {
+    setInterval(async () => await checkForMessage(config), config.interval || 5000);
 }

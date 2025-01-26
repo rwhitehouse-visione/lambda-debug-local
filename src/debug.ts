@@ -1,7 +1,7 @@
 import { startPolling } from './lambda-runner';
 import { handler } from './example-lambda';
 
-console.log('start');
+console.log('Debugging example-lambda.ts');
 
 startPolling({
     handler,
@@ -15,6 +15,4 @@ startPolling({
         accessKeyId: 'fake-access-key-id',
         secretAccessKey: 'fake-secret-access-key'
     }
-}).then(() => {
-    console.log('done');
-});
+})
