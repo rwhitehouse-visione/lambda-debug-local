@@ -10,7 +10,7 @@ Currently supported triggers:
 Full example:
 
 ```javascript
-import { startPollingS3 } from './lambda-debug-local';
+import { startPollingS3 } from 'lambda-debug-local';
 import { handler } from './example-lambda';
 
 console.log('Debugging example-lambda.ts');
@@ -37,7 +37,7 @@ npm install -s lambda-debug-local
 
 Import the startPollingS3 method 
 ```javascript
-import { startPollingS3 } from './lambda-debug-local';
+import { startPollingS3 } from 'lambda-debug-local';
 ```
 
 Call the startPollingS3 method with the following parameters:
