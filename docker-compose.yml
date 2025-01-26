@@ -1,4 +1,4 @@
-name: lambda-runner
+name: lambda-debug-local
 services:
   localstack:
     image: localstack/localstack

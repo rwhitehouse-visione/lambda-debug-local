@@ -1,4 +1,4 @@
-import { startPolling } from './lambda-runner';
+import { startPolling } from './lambda-debug-local';
 import { handler } from './example-lambda';
 
 console.log('Debugging example-lambda.ts');

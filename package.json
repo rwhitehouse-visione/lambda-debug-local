@@ -1,6 +1,7 @@
 {
-  "name": "lambda-runner",
+  "name": "@goosyman/lambda-debug-local",
   "version": "0.0.1",
+  "author": "Ryan Whitehouse",
   "scripts": {
     "dev": "tsx src/debug.ts",
     "start": "tsc && node dist/index.js",
@@ -8,7 +9,7 @@
   },
   "exports": {
     ".": {
-      "lambda-runner": "./dist/lambda-runner.js"
+      "lambda-debug-local": "./dist/lambda-debug-local.js"
     }
   },
   "dependencies": {
