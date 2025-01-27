@@ -5,6 +5,7 @@ Using this library, you are able to run your lambda function code locally but st
 
 Currently supported triggers:
 - S3NewFileTrigger
+- SQSReceiveMessageTrigger
 
 ## Usage
 Full example:
@@ -50,7 +51,45 @@ startPollingS3({
     region: 'eu-central-1',
     endpoint: 'http://localhost:4566',
     forcePathStyle: true,
-    maxAge: 1000 * 60 * 5, // 5 minutes
+    credentials: {
+        accessKeyId: 'fake-access-key-id',
+        secretAccessKey: 'fake-secret-access-key'
+    }
+})
+```
+
+### Updates:
+- 0.0.5: Adds SQS trigger (startPollingSQS).  Config is very similar to S3, but with queueUrl instead of bucketName.
+There is also no forcePathStyle or maxAge.  See example below:
+```javascript
+{
+    handler,
+    queueUrl: 'http://localhost:4566/000000000000/my-test-queue',
+    interval: 5000,
+    region: 'eu-central-1',
+    endpoint: 'http://localhost:4566',
+    credentials: {
+        accessKeyId: 'fake-access-key-id',
+        secretAccessKey: 'fake-secret-access-key'
+    }
+}
+```
+
+
+Full example:
+
+```javascript
+import { startPollingSQS } from 'lambda-debug-local';
+import { handler } from './example-lambda';
+
+console.log('Debugging example-lambda.ts');
+
+startPollingSQS({
+    handler,
+    queueUrl: 'http://localhost:4566/000000000000/my-test-queue',
+    interval: 5000,
+    region: 'eu-central-1',
+    endpoint: 'http://localhost:4566',
     credentials: {
         accessKeyId: 'fake-access-key-id',
         secretAccessKey: 'fake-secret-access-key'
