@@ -4,7 +4,7 @@ import {
 import { Context, S3Handler } from 'aws-lambda';
 
 export const handler: S3Handler = async (event: any, context: Context) => {
-    console.log('testHandler', event, context);
+    console.log('test S3 Handler', event, context);
 
     const region = 'eu-central-1';
     const endpoint = 'http://localhost:4566';
