@@ -60,6 +60,21 @@ startPollingS3({
 })
 ```
 
+### Recommended tools:
+This package works great with localstack.  Localstack is a local AWS cloud stack that allows you to develop and test your cloud apps offline.  It spins up a number of different services, including S3 and SQS, which can be used to trigger your lambda functions.
+- https://www.localstack.cloud/
+- https://github.com/localstack/localstack-desktop
+- https://docs.localstack.cloud/getting-started/installation/
+See Makefile for commands to add queues and messages to localstack. Then you can use localstack desktop to browse the queues and messages.
+
+If you use localstack, then the required config is 
+```javascript
+{
+    handler,
+    queueUrl: 'http://localhost:4566/000000000000/my-test-queue',
+}
+```
+
 ### Updates:
 - 0.0.5: Adds SQS trigger (startPollingSQS).  Config is very similar to S3, but with queueUrl instead of bucketName.
 There is also no forcePathStyle or maxAge.  See example below:
@@ -76,7 +91,6 @@ There is also no forcePathStyle or maxAge.  See example below:
     }
 }
 ```
-
 
 Full example:
 
