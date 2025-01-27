@@ -5,7 +5,7 @@ services:
     ports:
       - "4566-4599:4566-4599"
     environment:
-      - SERVICES=s3,lambda
+      - SERVICES=s3,sqs,lambda
       - DEBUG=1
       - AWS_DEFAULT_REGION=us-central-1
       - DISABLE_CORS_CHECKS=true

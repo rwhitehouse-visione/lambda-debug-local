@@ -3,7 +3,7 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Debug app",
+            "name": "Debug trigger in debug.ts",
             "command": "npm run dev",
             "request": "launch",
             "type": "node-terminal",

@@ -19,7 +19,7 @@ const fakeContext: Context = {
 };
 
 const testHandler: S3Handler = async (event: any, context: Context) => {
-    console.log('testHandler', event, context);
+    console.log('s3 handler', event, context);
 }
 
 type CheckForMessageParams = {
@@ -38,7 +38,6 @@ type CheckForMessageParams = {
 
 export const checkForMessage = async ({
     bucketName = 'my-first-bucket',
-    interval = 5000,
     region = 'eu-central-1',
     endpoint= 'http://localhost:4566',
     forcePathStyle = true,
@@ -49,7 +48,7 @@ export const checkForMessage = async ({
     },
     handler = testHandler
 }: CheckForMessageParams = {}) => {
-    console.log('Checking for new messages');
+    console.log('Checking for new messages in S3');
     const client = new S3Client({ 
         region, 
         endpoint,
