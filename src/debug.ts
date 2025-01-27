@@ -25,7 +25,6 @@ startPollingSQS({
     interval: 5000,
     region: 'eu-central-1',
     endpoint: 'http://localhost:4566',
-    maxAge: 1000 * 60 * 5, // 5 minutes
     credentials: {
         accessKeyId: 'fake-access-key-id',
         secretAccessKey: 'fake-secret-access-key'
