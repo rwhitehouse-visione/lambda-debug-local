@@ -3,6 +3,8 @@ A wrapper around lambda to facilitate a better development experience.
 
 Using this library, you are able to run your lambda function code locally but still trigger it with real events, ie. when a file is uploaded to an S3 bucket.  This avoids the need to build, package and deploy your lambda function every time you want to test it.
 
+Package can be found here: https://www.npmjs.com/package/lambda-debug-local
+
 Currently supported triggers:
 - S3NewFileTrigger
 - SQSReceiveMessageTrigger
