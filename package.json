@@ -1,6 +1,6 @@
 {
   "name": "lambda-debug-local",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "author": "Ryan Whitehouse",
   "license": "MIT",
   "scripts": {
@@ -8,8 +8,8 @@
     "start": "tsc && node dist/index.js",
     "build": "tsc"
   },
-  "main": "dist/lambda-debug-local.js",
-  "types": "src/lambda-debug-local.ts",
+  "main": "dist/index.js",
+  "types": "src/index.ts",
   "repository": {
     "type": "git",
     "url": "https://github.com/ryanwhitehouse/lambda-debug-local"
