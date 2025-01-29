@@ -9,6 +9,7 @@ Currently supported triggers:
 - S3NewFileTrigger
 - SQSReceiveMessageTrigger
 
+
 ## Usage
 Full example:
 
@@ -60,6 +61,7 @@ startPollingS3({
 })
 ```
 
+
 ### Recommended tools:
 This package works great with localstack.  Localstack is a local AWS cloud stack that allows you to develop and test your cloud apps offline.  It spins up a number of different services, including S3 and SQS, which can be used to trigger your lambda functions.
 - https://www.localstack.cloud/
@@ -74,6 +76,7 @@ If you use localstack, then the required config is
     queueUrl: 'http://localhost:4566/000000000000/my-test-queue',
 }
 ```
+
 
 ### Updates:
 - 0.0.5: Adds SQS trigger (startPollingSQS).  Config is very similar to S3, but with queueUrl instead of bucketName.
@@ -113,10 +116,12 @@ startPollingSQS({
 })
 ```
 
+
 ### Development: 
 
 Please help me to improve this project by contributing to it. 
 The main thing needed is more available triggers.
+
 
 #### Getting started:
 

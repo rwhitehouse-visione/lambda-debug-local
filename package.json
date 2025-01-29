@@ -1,6 +1,6 @@
 {
   "name": "lambda-debug-local",
-  "version": "0.0.6",
+  "version": "1.0.0",
   "author": "Ryan Whitehouse",
   "license": "MIT",
   "scripts": {
