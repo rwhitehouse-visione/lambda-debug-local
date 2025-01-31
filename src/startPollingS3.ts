@@ -79,8 +79,34 @@ export const checkForMessage = async ({
             const s3Event = {
                 Records: [
                     {
-                        bucket: { name: bucketName },
-                        object: { key: object.Key }
+                        eventVersion: '2.1',
+                        eventSource: 'aws:s3',
+                        awsRegion: region,
+                        eventTime: new Date().toISOString(),
+                        eventName: 'ObjectCreated:Put',
+                        userIdentity: { principalId: 'EXAMPLE' },
+                        requestParameters: { sourceIPAddress: '' },
+                        responseElements: {
+                            'x-amz-request-id': 'EXAMPLE123456789',
+                            'x-amz-id-2': 'EXAMPLE123/5678abcdefghijklambdaisawesome/mnopqrstuvwxyzABCDEFGH'
+                        },
+                        s3: {
+                            bucket: { 
+                                name: bucketName,
+                                ownerIdentity: { principalId: 'EXAMPLE' },
+                                arn: `arn:aws:s3:::${bucketName}`
+                            },
+                            object: { 
+                                key: object.Key,
+                                size: object.Size,
+                                eTag: '0123456789abcdef0123456789abcdef',
+                                sequencer: '0A1B2C3D4E5F678901'
+                            },
+                            s3SchemaVersion: '1.0',
+                            configurationId: 'testConfigRule',
+                            arn: `arn:aws:s3:::${bucketName}`,
+                            name: bucketName,
+                        }
                     }
                 ]
             }
