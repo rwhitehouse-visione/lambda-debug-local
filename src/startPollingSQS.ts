@@ -46,68 +46,72 @@ export const checkForMessage = async ({
     },
     handler = testHandler
 }: CheckForMessageParams = {}) => {
-
-    console.log('Checking for new messages in SQS');
-    const client = new SQSClient({ 
-        region, 
-        endpoint,
-        credentials
-    });
-    const command = new ReceiveMessageCommand({
-        QueueUrl: queueUrl,
-        MaxNumberOfMessages: 5,
-        WaitTimeSeconds: 5
-    });
-    const response = await client.send(command);
-
-    if (!response.Messages || response.Messages.length === 0) {
-        console.log('No messages found');
-        return;
-    }
-
-    console.log(response);
-
-    await Promise.all(response.Messages.map(async (message) => {
-        try {
-            console.log('New message:', message.Body);
-
-            const sqsEvent = {
-                Records: [
-                    {
-                        messageId: 'fake-message-id',
-                        receiptHandle: 'fake-receipt-handle',
-                        body: message.Body,
-                        attributes: {
-                            ApproximateReceiveCount: '1',
-                            SentTimestamp: Date.now().toString(),
-                            SenderId: 'fake-sender-id',
-                            approximateFirstReceiveTimestamp: Date.now().toString()
-                        },
-                        messageAttributes: {},
-                        md5OfBody: 'fake-md5-of-body',
-                        eventSource: 'aws:sqs',
-                        eventSourceARN: 'fake-event-source-arn',
-                        awsRegion: region
-                    }
-                ]
-            }
-            
-            const response = await handler(sqsEvent as any, fakeContext, () => {});
-
-            if (response && response.batchItemFailures?.length > 0) {
-                console.error('Error processing message', response.batchItemFailures);
-            } else {
-                const deleteCommand = new DeleteMessageCommand({
-                    QueueUrl: queueUrl,
-                    ReceiptHandle: message.ReceiptHandle
-                });
-                await client.send(deleteCommand);
-                console.log('Message deleted', message.MessageId);
-            }
-        } catch (error) {   
-            console.error('Error processing object', error);
+    try {
+        console.log('Checking for new messages in SQS');
+        const client = new SQSClient({ 
+            region, 
+            endpoint,
+            credentials
+        });
+        const command = new ReceiveMessageCommand({
+            QueueUrl: queueUrl,
+            MaxNumberOfMessages: 5,
+            WaitTimeSeconds: 5
+        });
+        const response = await client.send(command);
+    
+        if (!response.Messages || response.Messages.length === 0) {
+            console.log('No messages found');
+            return;
         }
-    }));
+    
+        console.log(response);
+    
+        await Promise.all(response.Messages.map(async (message) => {
+            try {
+                console.log('New message:', message.Body);
+    
+                const sqsEvent = {
+                    Records: [
+                        {
+                            messageId: 'fake-message-id',
+                            receiptHandle: 'fake-receipt-handle',
+                            body: message.Body,
+                            attributes: {
+                                ApproximateReceiveCount: '1',
+                                SentTimestamp: Date.now().toString(),
+                                SenderId: 'fake-sender-id',
+                                approximateFirstReceiveTimestamp: Date.now().toString()
+                            },
+                            messageAttributes: {},
+                            md5OfBody: 'fake-md5-of-body',
+                            eventSource: 'aws:sqs',
+                            eventSourceARN: 'fake-event-source-arn',
+                            awsRegion: region
+                        }
+                    ]
+                }
+                
+                const response = await handler(sqsEvent as any, fakeContext, () => {});
+    
+                if (response && response.batchItemFailures?.length > 0) {
+                    console.error('Error processing message', response.batchItemFailures);
+                } else {
+                    const deleteCommand = new DeleteMessageCommand({
+                        QueueUrl: queueUrl,
+                        ReceiptHandle: message.ReceiptHandle
+                    });
+                    await client.send(deleteCommand);
+                    console.log('Message deleted', message.MessageId);
+                }
+            } catch (error) {   
+                console.error('Error processing object', error);
+            }
+        }));
+    }
+    catch (error) {
+        console.error('Error checking for messages', error);
+    }
 }
 
 export const startPollingSQS = (config: CheckForMessageParams) => {
