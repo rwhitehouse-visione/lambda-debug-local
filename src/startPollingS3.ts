@@ -48,74 +48,79 @@ export const checkForMessage = async ({
     },
     handler = testHandler
 }: CheckForMessageParams = {}) => {
-    console.log('Checking for new messages in S3');
-    const client = new S3Client({ 
-        region, 
-        endpoint,
-        forcePathStyle,
-        credentials
-    });
-    const command = new ListObjectsV2Command({
-        Bucket: bucketName,
-    });
-    const response = await client.send(command);
-
-    if (!response.Contents || response.Contents.length === 0) {
-        console.log('No objects found');
-        return;
-    }
-
-    console.log(response);
-
-    const dateToSearch = new Date(Date.now() - maxAge);
-    await Promise.all(response.Contents.map(async (object) => {
-        if (!object.Key || !object.LastModified || object.LastModified < dateToSearch) {
+    try {
+        console.log('Checking for new messages in S3');
+        const client = new S3Client({ 
+            region, 
+            endpoint,
+            forcePathStyle,
+            credentials
+        });
+        const command = new ListObjectsV2Command({
+            Bucket: bucketName,
+        });
+        const response = await client.send(command);
+    
+        if (!response.Contents || response.Contents.length === 0) {
+            console.log('No objects found');
             return;
         }
-
-        try {
-            console.log('New File:', object.Key);
-
-            const s3Event = {
-                Records: [
-                    {
-                        eventVersion: '2.1',
-                        eventSource: 'aws:s3',
-                        awsRegion: region,
-                        eventTime: new Date().toISOString(),
-                        eventName: 'ObjectCreated:Put',
-                        userIdentity: { principalId: 'EXAMPLE' },
-                        requestParameters: { sourceIPAddress: '' },
-                        responseElements: {
-                            'x-amz-request-id': 'EXAMPLE123456789',
-                            'x-amz-id-2': 'EXAMPLE123/5678abcdefghijklambdaisawesome/mnopqrstuvwxyzABCDEFGH'
-                        },
-                        s3: {
-                            bucket: { 
-                                name: bucketName,
-                                ownerIdentity: { principalId: 'EXAMPLE' },
-                                arn: `arn:aws:s3:::${bucketName}`
-                            },
-                            object: { 
-                                key: object.Key,
-                                size: object.Size,
-                                eTag: '0123456789abcdef0123456789abcdef',
-                                sequencer: '0A1B2C3D4E5F678901'
-                            },
-                            s3SchemaVersion: '1.0',
-                            configurationId: 'testConfigRule',
-                            arn: `arn:aws:s3:::${bucketName}`,
-                            name: bucketName,
-                        }
-                    }
-                ]
+    
+        console.log(response);
+    
+        const dateToSearch = new Date(Date.now() - maxAge);
+        await Promise.all(response.Contents.map(async (object) => {
+            if (!object.Key || !object.LastModified || object.LastModified < dateToSearch) {
+                return;
             }
-            
-            await handler(s3Event as any, fakeContext, () => {});
-        } catch (error) {   
-            console.error('Error processing object', object.Key, error);
-        }
-    }));
+    
+            try {
+                console.log('New File:', object.Key);
+    
+                const s3Event = {
+                    Records: [
+                        {
+                            eventVersion: '2.1',
+                            eventSource: 'aws:s3',
+                            awsRegion: region,
+                            eventTime: new Date().toISOString(),
+                            eventName: 'ObjectCreated:Put',
+                            userIdentity: { principalId: 'EXAMPLE' },
+                            requestParameters: { sourceIPAddress: '' },
+                            responseElements: {
+                                'x-amz-request-id': 'EXAMPLE123456789',
+                                'x-amz-id-2': 'EXAMPLE123/5678abcdefghijklambdaisawesome/mnopqrstuvwxyzABCDEFGH'
+                            },
+                            s3: {
+                                bucket: { 
+                                    name: bucketName,
+                                    ownerIdentity: { principalId: 'EXAMPLE' },
+                                    arn: `arn:aws:s3:::${bucketName}`
+                                },
+                                object: { 
+                                    key: object.Key,
+                                    size: object.Size,
+                                    eTag: '0123456789abcdef0123456789abcdef',
+                                    sequencer: '0A1B2C3D4E5F678901'
+                                },
+                                s3SchemaVersion: '1.0',
+                                configurationId: 'testConfigRule',
+                                arn: `arn:aws:s3:::${bucketName}`,
+                                name: bucketName,
+                            }
+                        }
+                    ]
+                }
+                
+                await handler(s3Event as any, fakeContext, () => {});
+            } catch (error) {   
+                console.error('Error processing object', object.Key, error);
+            }
+        }));
+    }
+    catch (error) {
+        console.error('Error checking for objects', error);
+    }
 }
 
 export const startPollingS3 = (config: CheckForMessageParams) => {
