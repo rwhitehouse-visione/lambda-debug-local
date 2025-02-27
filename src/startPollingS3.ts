@@ -23,6 +23,7 @@ const testHandler: S3Handler = async (event: any, context: Context) => {
 }
 
 type CheckForMessageParams = {
+    debugLogs?: boolean;
     bucketName?: string;
     interval?: number;
     region?: string;
@@ -37,6 +38,7 @@ type CheckForMessageParams = {
 };
 
 export const checkForMessage = async ({
+    debugLogs = false,
     bucketName = 'my-first-bucket',
     region = 'eu-central-1',
     endpoint= 'http://localhost:4566',
@@ -49,7 +51,7 @@ export const checkForMessage = async ({
     handler = testHandler
 }: CheckForMessageParams = {}) => {
     try {
-        console.log('Checking for new messages in S3');
+        if (debugLogs) console.log('Checking for new messages in S3');
         const client = new S3Client({ 
             region, 
             endpoint,
@@ -62,11 +64,11 @@ export const checkForMessage = async ({
         const response = await client.send(command);
     
         if (!response.Contents || response.Contents.length === 0) {
-            console.log('No objects found');
+            if (debugLogs) console.log('No objects found');
             return;
         }
     
-        console.log(response);
+        if (debugLogs) console.log(response);
     
         const dateToSearch = new Date(Date.now() - maxAge);
         await Promise.all(response.Contents.map(async (object) => {
@@ -75,7 +77,7 @@ export const checkForMessage = async ({
             }
     
             try {
-                console.log('New File:', object.Key);
+                if (debugLogs) console.log('New File:', object.Key);
     
                 const s3Event = {
                     Records: [
