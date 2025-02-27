@@ -23,6 +23,7 @@ const testHandler: SQSHandler = async (event: any, context: Context) => {
 }
 
 type CheckForMessageParams = {
+    debugLogs?: boolean;
     queueUrl?: string;
     interval?: number;
     region?: string;
@@ -36,6 +37,7 @@ type CheckForMessageParams = {
 };
 
 export const checkForMessage = async ({
+    debugLogs = false,
     queueUrl = 'http://localhost:4566/000000000000/my-test-queue',
     region = 'eu-central-1',
     endpoint= 'http://localhost:4566/',
@@ -47,7 +49,7 @@ export const checkForMessage = async ({
     handler = testHandler
 }: CheckForMessageParams = {}) => {
     try {
-        console.log('Checking for new messages in SQS');
+        if (debugLogs) console.log('Checking for new messages in SQS');
         const client = new SQSClient({ 
             region, 
             endpoint,
@@ -61,15 +63,15 @@ export const checkForMessage = async ({
         const response = await client.send(command);
     
         if (!response.Messages || response.Messages.length === 0) {
-            console.log('No messages found');
+            if (debugLogs) console.log('No messages found');
             return;
         }
     
-        console.log(response);
+        if (debugLogs) console.log(response);
     
         await Promise.all(response.Messages.map(async (message) => {
             try {
-                console.log('New message:', message.Body);
+                if (debugLogs) console.log('New message:', message.Body);
     
                 const sqsEvent = {
                     Records: [
@@ -102,7 +104,7 @@ export const checkForMessage = async ({
                         ReceiptHandle: message.ReceiptHandle
                     });
                     await client.send(deleteCommand);
-                    console.log('Message deleted', message.MessageId);
+                    if (debugLogs) console.log('Message deleted', message.MessageId);
                 }
             } catch (error) {   
                 console.error('Error processing object', error);
