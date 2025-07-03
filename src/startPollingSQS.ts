@@ -105,7 +105,7 @@ export const checkForMessage = async ({
                     ReceiptHandle: message.ReceiptHandle
                 });
                 await client.send(deleteCommand);
-                console.log('Message deleted', message.MessageId);
+                if (debugLogs) console.log('Message deleted', message.MessageId);
 
             } catch (error) {   
                 console.error('Error processing object', error);
